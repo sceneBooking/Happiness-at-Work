@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scene | Employee Engagement Survey</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 40px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #414141;
+    }
+
+    .header img {
+      height: 50px;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 100px);
+    }
+
+    .left {
+      width: 40%;
+      height: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .left video {
+      height: 100%;
+      width: auto;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .right {
+      width: 50%;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-screen input,
+    .form-screen select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .form-screen button {
+      background-color: #3F0E54;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .question-count {
+      color: #3F0E54;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .question-text {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      background: white;
+      margin-bottom: 12px;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: background 0.3s ease;
+    }
+
+    .options button.selected {
+      background-color: #CDB5D7;
+    }
+
+    .options button:hover {
+      background-color: #CDB5D7;
+    }
+
+    .next-btn {
+      background-color: #3F0E54;
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .next-btn:disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
+    }
+
+    .skip-btn {
+      background-color: #aaa;
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+
+    @media (max-width:800px) {
+      .left {
+        display: none; 
+      }
+
+      .right {
+        width: 80%;
+        padding: 30px 20px;
+        margin: 0 auto;
+        align-items: center;
+        text-align: center;
+      }
+
+      .form-screen h2,
+      .question-text {
+        font-size: 2rem; 
+      }
+
+      .form-screen input,
+      .form-screen select,
+      .form-screen button,
+      .options button,
+      .next-btn {
+        font-size: 1.2rem; 
+      }
+
+      .question-count {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="./img/scene_logo-black_color.png" alt="Scene Company Logo" />
+  </div>
+
+  <div class="container">
+    <div class="left">
+      <video src="./vid/vid.mp4" autoplay muted loop></video>
+    </div>
+
+    <div class="right">
+      <!-- Intro Screen -->
+      <div class="form-screen" id="form-screen">
+        <h2 style="margin-bottom: 20px; font-size: 2.2rem;">Before we begin...</h2>
+        <input type="text" id="name" placeholder="Your Name" required />
+        <select id="gender" required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+          <option value="Prefer not to say">Prefer not to say</option>
+        </select>
+        <input type="email" id="email" placeholder="Your Email" />
+        <button onclick="startSurvey()">Start Survey</button>
+      </div>
+
+      <!-- Questionnaire -->
+      <div id="questionnaire" style="display:none;">
+        <div class="question-count" id="question-count">Question 1/10</div>
+        <div class="question-text" id="question-text"></div>
+        <div class="options" id="options"></div>
+        <div style="display:flex; gap:10px;">
+          <button class="next-btn" id="next-btn" disabled>Next →</button>
+          <button class="skip-btn" id="skip-btn" style="display:none;">Skip →</button>
+        </div>
+      </div>
+      
+      <!-- Thank You -->
+      <div id="thank-you" style="display:none; text-align:center;">
+        <img src="https://media2.giphy.com/media/3XHMTIqcUev2Vy9ILk/giphy.webp" alt="Success" style="width: 220px; margin-bottom: 20px;" />
+        <h2 style="font-size: 2rem; color: #3F0E54;">🎉 Your responses were submitted successfully!</h2>
+        <p style="font-size: 1.1rem;">Thank you for sharing your inputs. We’ll use them to curate great experiences just for your team.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { type: "text", text: "🏢 What is your Company Name?", placeholder: "Enter company name (max 30 chars)", maxlength: 30 },
+      { type: "options", text: "👥 Size of your team / company (in your city)", options: ["1–20", "21–50", "51–100", "100+"] },
+      { type: "options", text: "📅 How often do you organize employee engagement or recreation activities?", options: ["Weekly", "Monthly", "Quarterly", "Rarely / On special occasions", "Not currently"] },
+      { type: "text", text: "✨ What kind of engagement formats have worked best for your team?", placeholder: "e.g. team lunches, game nights, wellness sessions" },
+      { type: "options", text: "🎯 What are the key goals behind your team-building or engagement efforts?", options: ["Improve team bonding", "Boost motivation & morale", "Reduce burnout / stress", "Encourage creativity & learning", "Celebrate milestones", "Retain talent", "Other"] },
+      { type: "text", text: "⚡ Do you face any challenges when planning or executing team activities?", placeholder: "e.g. lack of time, low participation, budget constraints" },
+      { type: "options", text: "🌐 Would you be open to exploring curated, plug-and-play team experiences from Scene?", options: ["Yes", "Maybe — tell me more", "Not currently"] },
+      { type: "options", text: "🎉 What kind of experiences would your team enjoy most (if hosted externally - choose any 3)?", options: ["Art & creativity sessions (pottery, painting)", "Adventure / Outdoor (kayaking, trekking)", "Wellness (yoga, sound healing)", "Learning-based (coffee brewing, storytelling)", "Chill social sessions (board games, karaoke)", "Food & drink-based (wine tasting, baking)", "Other"] },
+      { type: "options", text: "📩 Would you like someone from Scene to reach out with options for your next employee activity?", options: ["Yes, please", "Maybe later", "No, thank you"] },
+      { type: "text", text: "📞 Email / Phone (optional, if you’d like us to reach out)", placeholder: "Enter your email or phone" }
+    ];
+
+    let currentQuestion = 0;
+    let userResponses = {};
+
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options');
+    const nextBtn = document.getElementById('next-btn');
+    const skipBtn = document.getElementById('skip-btn');
+    const questionCount = document.getElementById('question-count');
+
+    function loadQuestion() {
+      const q = questions[currentQuestion];
+      questionCount.innerText = `Question ${currentQuestion + 1}/${questions.length}`;
+      questionText.innerText = q.text;
+      optionsContainer.innerHTML = '';
+      nextBtn.disabled = true;
+
+      // Show skip button only for last question
+      skipBtn.style.display = (currentQuestion === questions.length - 1) ? "inline-block" : "none";
+
+      if (q.type === "options") {
+        const selectedOptions = new Set();
+        q.options.forEach(option => {
+          const btn = document.createElement('button');
+          btn.innerText = option;
+          btn.onclick = () => {
+            btn.classList.toggle('selected');
+            if (selectedOptions.has(option)) {
+              selectedOptions.delete(option);
+            } else {
+              selectedOptions.add(option);
+            }
+            nextBtn.disabled = selectedOptions.size === 0;
+            userResponses[`Q${currentQuestion + 1}`] = Array.from(selectedOptions);
+
+            // If "Other" is selected, show input box
+            if (option === "Other") {
+              const input = document.createElement('input');
+              input.type = "text";
+              input.maxLength = 25;
+              input.placeholder = "Please specify (max 25 chars)";
+              input.style.marginTop = "10px";
+              input.oninput = () => {
+                if (input.value.trim() !== "") {
+                  userResponses[`Q${currentQuestion + 1}`].push("Other: " + input.value.trim());
+                }
+              };
+              optionsContainer.appendChild(input);
+            }
+          };
+          optionsContainer.appendChild(btn);
+        });
+      } else if (q.type === "text") {
+        const input = document.createElement('input');
+        input.type = "text";
+        if (q.maxlength) input.maxLength = q.maxlength;
+        input.placeholder = q.placeholder || "Type your answer";
+        input.style.padding = "12px";
+        input.style.width = "100%";
+        input.style.border = "1px solid #ccc";
+        input.style.borderRadius = "8px";
+        input.oninput = () => {
+          nextBtn.disabled = input.value.trim() === "";
+          userResponses[`Q${currentQuestion + 1}`] = input.value.trim();
+        };
+        optionsContainer.appendChild(input);
+      }
+    }
+
+    nextBtn.onclick = () => {
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        loadQuestion();
+      } else {
+        submitToGoogleSheets();
+      }
+    };
+
+    skipBtn.onclick = () => {
+      userResponses[`Q${currentQuestion + 1}`] = "";
+      submitToGoogleSheets();
+    };
+
+    async function submitToGoogleSheets() {
+      document.getElementById('questionnaire').style.display = 'none';
+      const thankYouDiv = document.getElementById('thank-you');
+
+      try {
+        // include intro form data
+        userResponses["Name"] = document.getElementById('name').value.trim();
+        userResponses["Gender"] = document.getElementById('gender').value;
+        userResponses["Email"] = document.getElementById('email').value.trim();
+
+        for (let i = 0; i < questions.length; i++) {
+          const qKey = `Q${i+1}`;
+          if (!userResponses[qKey]) userResponses[qKey] = "";
+        }
+
+        const formData = new URLSearchParams();
+        for (const key in userResponses) {
+          let value = userResponses[key];
+          if (Array.isArray(value)) value = value.join(', ');
+          formData.append(key, value);
+        }
+
+        const scriptURL = 'https://script.google.com/macros/-dX6LLko0rK8gcE-LLT7y97CLnY5n/exec';
+        const response = await fetch(scriptURL, { method: 'POST', body: formData });
+        if (!response.ok) throw new Error('Network response was not ok');
+      } catch (error) {
+        console.error('Submission error:', error);
+        localStorage.setItem('surveyBackup', JSON.stringify(userResponses));
+      } finally {
+        thankYouDiv.style.display = 'block';
+      }
+    }
+
+    function startSurvey() {
+      // save intro data immediately
+      userResponses["Name"] = document.getElementById('name').value.trim();
+      userResponses["Gender"] = document.getElementById('gender').value;
+      userResponses["Email"] = document.getElementById('email').value.trim();
+
+      document.getElementById('form-screen').style.display = 'none';
+      document.getElementById('questionnaire').style.display = 'block';
+      loadQuestion();
+    }
+  </script>
+</body>
+</html>
