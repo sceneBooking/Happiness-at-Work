@@ -230,6 +230,29 @@
       z-index: -1;
       opacity: 100;
     }
+    
+    .error-message {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+    
+    .location-error {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    
+    .success-message {
+      display: none;
+      background: #4caf50;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -247,6 +270,7 @@
             <li>Hyderabad</li>
           </ul>
           <input type="hidden" name="location" id="locationInput" required />
+          <div id="locationError" class="location-error">Please select a location</div>
         </div>
       </div>
     </div>
@@ -257,24 +281,31 @@
   </video>
 
   <div class="container">
+    <div id="successMessage" class="success-message">
+      Thank you for your input! Our team will be in touch if there's a fit.
+    </div>
+    
     <h2 class="form-title">Employee Engagement & Recreation — Company Input Form</h2>
-    <p>We’re on a mission to explore how companies bring fun, energy, and connection into their workplace! 🚀💡
-      We’d love to hear about your current employee engagement & recreation practices 🎉 — and discover how Scene can boost the vibe with fresh, curated experiences your teams will love. 💃🕺</p>
+    <p>We're on a mission to explore how companies bring fun, energy, and connection into their workplace! 🚀💡
+      We'd love to hear about your current employee engagement & recreation practices 🎉 — and discover how Scene can boost the vibe with fresh, curated experiences your teams will love. 💃🕺</p>
 
     <form id="companyForm">
       <div class="row">
         <div>
           <label>1. Your Name</label>
           <input type="text" name="name" placeholder="Enter Your Name" required />
+          <div class="error-message" id="nameError">Please enter your name</div>
         </div>
         <div>
           <label>Your Email</label>
           <input type="email" name="email" placeholder="Enter Your Email" required />
+          <div class="error-message" id="emailError">Please enter a valid email</div>
         </div>
       </div>
 
       <label>2. Company Name</label>
       <input type="text" name="companyName" placeholder="Enter Company Name" required />
+      <div class="error-message" id="companyError">Please enter your company name</div>
 
       <label>3. Size of your team / company (in your city)</label>
       <select name="teamSize" required>
@@ -284,6 +315,7 @@
         <option value="51–100">51–100</option>
         <option value="100+">100+</option>
       </select>
+      <div class="error-message" id="teamSizeError">Please select team size</div>
 
       <label>4. How often do you organize employee engagement or recreation activities?</label>
       <select name="activityFrequency" required>
@@ -294,9 +326,11 @@
         <option value="Rarely / On special occasions">Rarely / On special occasions</option>
         <option value="Not currently">Not currently</option>
       </select>
+      <div class="error-message" id="frequencyError">Please select frequency</div>
       
       <label>5. What kind of engagement formats have worked best for your team?</label>
       <textarea name="engagementFormats" placeholder="e.g. team lunches, game nights, offsites, wellness sessions, creative workshops, etc." required></textarea>
+      <div class="error-message" id="formatsError">Please describe engagement formats</div>
 
       <label>6. What are the key goals behind your team-building or engagement efforts? (Select all that apply)</label>
       <div class="checkbox-group">
@@ -311,9 +345,11 @@
           <input type="text" name="goalsOther" id="goalsOtherText" class="other-input" placeholder="Please specify" maxlength="30">
         </div>
       </div>
+      <div class="error-message" id="goalsError">Please select at least one goal</div>
 
       <label>7. Do you face any challenges when planning or executing team activities?</label>
       <textarea name="challenges" placeholder="e.g. lack of time, low participation, repetitive ideas, budget constraints, etc." required></textarea>
+      <div class="error-message" id="challengesError">Please describe challenges</div>
       
       <label>8. Would you be open to exploring curated, plug-and-play team experiences from an external platform like Scene?</label>
       <select name="openToScene" required>
@@ -322,6 +358,7 @@
         <option value="Maybe — tell me more">Maybe — tell me more</option>
         <option value="Not currently">Not currently</option>
       </select>
+      <div class="error-message" id="openToSceneError">Please select an option</div>
       
       <label>9. What kind of experiences would your team enjoy most (if hosted externally)? (Pick top 3)</label>
       <div id="experienceCheckboxes" class="checkbox-group">
@@ -336,6 +373,7 @@
           <input type="text" name="experiencesOther" id="experiencesOtherText" class="other-input" placeholder="Please specify" maxlength="30">
         </div>
       </div>
+      <div class="error-message" id="experiencesError">Please select up to 3 experiences</div>
       
       <label>10. Would you like someone from Scene to reach out with options for your next employee activity?</label>
       <select name="reachOut" required>
@@ -344,8 +382,9 @@
         <option value="Maybe later">Maybe later</option>
         <option value="No, thank you">No, thank you</option>
       </select>
+      <div class="error-message" id="reachOutError">Please select an option</div>
       
-      <label>Phone (Optional, if you’d like us to reach out)</label>
+      <label>Phone (Optional, if you'd like us to reach out)</label>
       <input type="tel" name="phone" placeholder="Enter your Phone number" />
 
       <button type="submit" class="submit-btn">Submit Form</button>
@@ -358,9 +397,11 @@
       const btn = document.getElementById('locationBtn');
       const list = document.getElementById('locationList');
       const input = document.getElementById('locationInput');
+      const locationError = document.getElementById('locationError');
 
       btn.addEventListener('click', () => {
         list.style.display = list.style.display === 'block' ? 'none' : 'block';
+        locationError.style.display = 'none';
       });
 
       list.querySelectorAll('li').forEach(item => {
@@ -368,6 +409,7 @@
           btn.textContent = item.textContent + ' ▾';
           input.value = item.textContent;
           list.style.display = 'none';
+          locationError.style.display = 'none';
         });
       });
 
@@ -391,25 +433,65 @@
           });
       });
 
-      // Form submission
+      // Form validation and submission
       const form = document.getElementById('companyForm');
+      const successMessage = document.getElementById('successMessage');
       
+      // Add input validation
+      const requiredFields = form.querySelectorAll('[required]');
+      requiredFields.forEach(field => {
+        field.addEventListener('blur', function() {
+          validateField(this);
+        });
+      });
+      
+      // Form submission
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // --- START: ADDED VALIDATION FOR CHECKBOXES ---
+        // Validate all required fields
+        let isValid = true;
+        requiredFields.forEach(field => {
+          if (!validateField(field)) {
+            isValid = false;
+          }
+        });
+        
+        // Validate location
+        if (!input.value) {
+          locationError.style.display = 'block';
+          isValid = false;
+        } else {
+          locationError.style.display = 'none';
+        }
+        
+        // Validate checkboxes for question 6
         const goalsChecked = form.querySelectorAll('input[name="goals"]:checked').length > 0;
         if (!goalsChecked) {
-          alert('Please select at least one option for question 6.');
-          return; // Stop submission
+          document.getElementById('goalsError').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('goalsError').style.display = 'none';
         }
-
+        
+        // Validate checkboxes for question 9
         const experiencesChecked = form.querySelectorAll('input[name="experiences"]:checked').length > 0;
         if (!experiencesChecked) {
-          alert('Please select at least one option for question 9.');
-          return; // Stop submission
+          document.getElementById('experiencesError').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('experiencesError').style.display = 'none';
         }
-        // --- END: ADDED VALIDATION ---
+        
+        if (!isValid) {
+          // Scroll to first error
+          const firstError = form.querySelector('.error-message[style*="display: block"], .location-error[style*="display: block"]') || 
+                            form.querySelector('.error-message, .location-error');
+          if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
 
         const submitBtn = form.querySelector('.submit-btn');
         submitBtn.disabled = true;
@@ -443,25 +525,53 @@
         // Submit to Google Sheets
         submitToGoogleSheets(formData)
           .then(response => {
-            if (response.result === 'success') {
-              alert("Thank you for your input!\nOur team will be in touch if there's a fit.");
-              form.reset();
-              // Reset other text fields manually
-              document.getElementById('goalsOtherText').style.display = 'none';
-              document.getElementById('experiencesOtherText').style.display = 'none';
+            if (response.ok) {
+              // Show success message
+              successMessage.style.display = 'block';
+              form.style.display = 'none';
+              document.querySelector('.form-title').style.display = 'none';
+              document.querySelector('p').style.display = 'none';
+              
+              // Scroll to success message
+              successMessage.scrollIntoView({ behavior: 'smooth' });
             } else {
-              throw new Error(response.message || 'Unknown error from server');
+              throw new Error('Network response was not ok');
             }
           })
           .catch(error => {
             console.error('Error:', error);
-            alert("There was a problem submitting your form. Please try again.\n" + error.message);
+            alert("There was a problem submitting your form. Please try again later or contact us directly.");
           })
           .finally(() => {
             submitBtn.disabled = false;
             submitBtn.textContent = 'Submit Form';
           });
       });
+      
+      // Field validation function
+      function validateField(field) {
+        const errorElement = document.getElementById(field.name + 'Error') || 
+                            document.getElementById(field.id + 'Error');
+        
+        if (!errorElement) return true;
+        
+        if (!field.value.trim()) {
+          errorElement.style.display = 'block';
+          return false;
+        }
+        
+        // Email validation
+        if (field.type === 'email') {
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailPattern.test(field.value)) {
+            errorElement.style.display = 'block';
+            return false;
+          }
+        }
+        
+        errorElement.style.display = 'none';
+        return true;
+      }
     });
 
     function toggleOtherInput(checkbox, inputId) {
@@ -477,19 +587,12 @@
     }
 
     function submitToGoogleSheets(formData) {
-      // Replace with your Google Apps Script Web App URL
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbxu178eDM5nkZq-5BEhztiygWaE82CGIKqoAqFgdBqZqDUF2XOv7YrMOeinDhD4FVVw9A/exec';
+      
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbxP8DXispBpbBekEYOwvikVluVX7DWS4doQ10vPyotzfCMelFH0ENloWBBoHT9JpbiE/exec';
       
       return fetch(scriptURL, {
         method: 'POST',
         body: formData
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        // Check if response is empty, which can happen with some Apps Script responses
-        return response.text().then(text => text ? JSON.parse(text) : { result: 'success' });
       });
     }
   </script>
