@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scene | Company Input Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rammetto+One&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: #f8f7f3;
+      color: #111;
+    }
+    .logo-default{
+        width: 20%;
+        padding-left: 30px;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      padding: 2px 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+      z-index: 1000;
+    }
+
+    .header h2 {
+      font-weight: 800;
+      font-size: 24px;
+      color: #5e239d;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background:rgb(222, 222, 222);
+      opacity: 0.9;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      margin-top: 12%;
+    }
+    .container-para{
+        font-family: 'Roboto', sans-serif;
+      background: rgb(222, 222, 222);
+      color: #111;
+    }
+    .scene-text{
+      font-family: "Rammetto One", sans-serif;
+        font-weight: 50;
+        font-size: 15px;
+    }
+    .form-title{
+        font-family: "Rammetto One", sans-serif;
+        font-weight: 400;
+        font-size: 35px;
+        font-style: normal;
+    }
+
+    p {
+      color: #666;
+      font-size: 15px;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin: 20px 0 6px;
+    }
+    
+    .checkbox-group label {
+      display: inline-block;
+      font-weight: normal;
+      margin-right: 15px;
+    }
+    
+    .checkbox-item {
+        display: block;
+        margin-bottom: 8px;
+    }
+    
+    .checkbox-item input[type="checkbox"] {
+        width: auto;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+    
+    .checkbox-item .other-input {
+        display: none;
+        width: 50%;
+        margin-left: 10px;
+        max-width: 250px;
+        vertical-align: middle;
+    }
+
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      box-sizing: border-box;
+      outline-color: #7f35db;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .row {
+      display: flex;
+      gap: 15px;
+    }
+
+    .row > div {
+      flex: 1;
+    }
+
+    .submit-btn {
+      margin-top: 30px;
+      background: #7F55B1;
+      color: white;
+      padding: 14px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: #5e239d;
+    }
+
+    @media (max-width: 600px) {
+      .row {
+        flex-direction: column;
+        gap: 0;
+      }
+      .header{
+        padding:0;
+      }
+      .form-title{
+        font-size: 24px;
+      }
+      .container{
+        margin-top:40%;
+        margin-left: 3%;
+        margin-right: 3%;
+      }
+      .button-down {
+        margin-right: 30px;
+      }
+      .dropdown{
+        margin-right: 20px;
+        width: 100%;
+      }
+      .logo-default{
+        width: 45%;
+      }
+      .loc{
+        display: none;
+      }
+    }
+    .dropdown-wrapper {
+      margin: 20px 0;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown button {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      background: white;
+      text-align: left;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .dropdown-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      width: 100%;
+      top: 100%;
+      left: 0;
+      z-index: 10;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      background: white;
+      display: none;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+
+    .dropdown-list li {
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .dropdown-list li:hover {
+      background: #f0f0f0;
+    }
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 100;
+    }
+    
+    .error-message {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+    
+    .location-error {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    
+    .success-message {
+      display: none;
+      background: #4caf50;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="https://scenebooking.com/"><img class="logo-default" src="./vid,img/scene_logo-black_color.png" alt="SCENE" itemprop="url"></a>
+    <div>
+      <div class="dropdown-wrapper">
+        <label class="loc">Location</label>
+        <div class="dropdown" style="padding-right: 15px;">
+          <button type="button" id="locationBtn" class="button-down">Select Location ▾</button>
+          <ul id="locationList" class="dropdown-list">
+            <li>Chennai</li>
+            <li>Pondicherry</li>
+            <li>Coimbatore</li>
+            <li>Hyderabad</li>
+          </ul>
+          <input type="hidden" name="location" id="locationInput" required />
+          <div id="locationError" class="location-error">Please select a location</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <video autoplay muted loop playsinline class="video-bg">
+    <source src="./vid,img/back.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="container">
+    <div id="successMessage" class="success-message">
+      Thank you for your input! Our team will be in touch if there's a fit.
+    </div>
+    
+    <h2 class="form-title">Employee Engagement & Recreation — Company Input Form</h2>
+    <p>We're on a mission to explore how companies bring fun, energy, and connection into their workplace! 🚀💡
+      We'd love to hear about your current employee engagement & recreation practices 🎉 — and discover how Scene can boost the vibe with fresh, curated experiences your teams will love. 💃🕺</p>
+
+    <form id="companyForm">
+      <div class="row">
+        <div>
+          <label>1. Your Name</label>
+          <input type="text" name="name" placeholder="Enter Your Name" required />
+          <div class="error-message" id="nameError">Please enter your name</div>
+        </div>
+        <div>
+          <label>Your Email</label>
+          <input type="email" name="email" placeholder="Enter Your Email" required />
+          <div class="error-message" id="emailError">Please enter a valid email</div>
+        </div>
+      </div>
+
+      <label>2. Company Name</label>
+      <input type="text" name="companyName" placeholder="Enter Company Name" required />
+      <div class="error-message" id="companyError">Please enter your company name</div>
+
+      <label>3. Size of your team / company (in your city)</label>
+      <select name="teamSize" required>
+        <option value="" disabled selected>Select Team Size</option>
+        <option value="1–20">1–20</option>
+        <option value="21–50">21–50</option>
+        <option value="51–100">51–100</option>
+        <option value="100+">100+</option>
+      </select>
+      <div class="error-message" id="teamSizeError">Please select team size</div>
+
+      <label>4. How often do you organize employee engagement or recreation activities?</label>
+      <select name="activityFrequency" required>
+        <option value="" disabled selected>Select Frequency</option>
+        <option value="Weekly">Weekly</option>
+        <option value="Monthly">Monthly</option>
+        <option value="Quarterly">Quarterly</option>
+        <option value="Rarely / On special occasions">Rarely / On special occasions</option>
+        <option value="Not currently">Not currently</option>
+      </select>
+      <div class="error-message" id="frequencyError">Please select frequency</div>
+      
+      <label>5. What kind of engagement formats have worked best for your team?</label>
+      <textarea name="engagementFormats" placeholder="e.g. team lunches, game nights, offsites, wellness sessions, creative workshops, etc." required></textarea>
+      <div class="error-message" id="formatsError">Please describe engagement formats</div>
+
+      <label>6. What are the key goals behind your team-building or engagement efforts? (Select all that apply)</label>
+      <div class="checkbox-group">
+        <div class="checkbox-item"><label><input type="checkbox" name="goals" value="Improve team bonding"> Improve team bonding</label></div>
+        <div class="checkbox-item"><label><input type="checkbox" name="goals" value="Boost motivation & morale"> Boost motivation & morale</label></div>
+        <div class="checkbox-item"><label><input type="checkbox" name="goals" value="Reduce burnout / stress"> Reduce burnout / stress</label></div>
+        <div class="checkbox-item"><label><input type="checkbox" name="goals" value="Encourage creativity & learning"> Encourage creativity & learning</label></div>
+        <div class="checkbox-item"><label><input type="checkbox" name="goals" value="Celebrate milestones"> Celebrate milestones</label></div>
+        <div class="checkbox-item"><label><input type="checkbox" name="goals" value="Retain talent"> Retain talent</label></div>
+        <div class="checkbox-item">
+          <label><input type="checkbox" name="goals" value="Other" onchange="toggleOtherInput(this, 'goalsOtherText')"> Other</label>
+          <input type="text" name="goalsOther" id="goalsOtherText" class="other-input" placeholder="Please specify" maxlength="30">
+        </div>
+      </div>
+      <div class="error-message" id="goalsError">Please select at least one goal</div>
+
+      <label>7. Do you face any challenges when planning or executing team activities?</label>
+      <textarea name="challenges" placeholder="e.g. lack of time, low participation, repetitive ideas, budget constraints, etc." required></textarea>
+      <div class="error-message" id="challengesError">Please describe challenges</div>
+      
+      <label>8. Would you be open to exploring curated, plug-and-play team experiences from an external platform like Scene?</label>
+      <select name="openToScene" required>
+        <option value="" disabled selected>Select an option</option>
+        <option value="Yes">Yes</option>
+        <option value="Maybe — tell me more">Maybe — tell me more</option>
+        <option value="Not currently">Not currently</option>
+      </select>
+      <div class="error-message" id="openToSceneError">Please select an option</div>
+      
+      <label>9. What kind of experiences would your team enjoy most (if hosted externally)? (Pick top 3)</label>
+      <div id="experienceCheckboxes" class="checkbox-group">
+        <div class="checkbox-item"><label><input type="checkbox" name="experiences" value="Art & creativity sessions"> Art & creativity sessions (e.g. pottery, painting)</label></div>
+        <div class="checkbox-item"><label><input type="checkbox" name="experiences" value="Adventure/outdoor"> Adventure/outdoor (e.g. kayaking, trekking)</label></div>
+        <div class="checkbox-item"><label><input type="checkbox" name="experiences" value="Wellness"> Wellness (e.g. yoga, sound healing)</label></div>
+        <div class="checkbox-item"><label><input type="checkbox" name="experiences" value="Learning-based"> Learning-based (e.g. coffee brewing, storytelling)</label></div>
+        <div class="checkbox-item"><label><input type="checkbox" name="experiences" value="Chill social sessions"> Chill social sessions (e.g. board game cafés, karaoke)</label></div>
+        <div class="checkbox-item"><label><input type="checkbox" name="experiences" value="Food & drink-based"> Food & drink-based (e.g. wine tasting, baking)</label></div>
+        <div class="checkbox-item">
+          <label><input type="checkbox" name="experiences" value="Other" onchange="toggleOtherInput(this, 'experiencesOtherText')"> Other</label>
+          <input type="text" name="experiencesOther" id="experiencesOtherText" class="other-input" placeholder="Please specify" maxlength="30">
+        </div>
+      </div>
+      <div class="error-message" id="experiencesError">Please select up to 3 experiences</div>
+      
+      <label>10. Would you like someone from Scene to reach out with options for your next employee activity?</label>
+      <select name="reachOut" required>
+        <option value="" disabled selected>Select an option</option>
+        <option value="Yes, please">Yes, please</option>
+        <option value="Maybe later">Maybe later</option>
+        <option value="No, thank you">No, thank you</option>
+      </select>
+      <div class="error-message" id="reachOutError">Please select an option</div>
+      
+      <label>Phone (Optional, if you'd like us to reach out)</label>
+      <input type="tel" name="phone" placeholder="Enter your Phone number" />
+
+      <button type="submit" class="submit-btn">Submit Form</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Location dropdown functionality
+      const btn = document.getElementById('locationBtn');
+      const list = document.getElementById('locationList');
+      const input = document.getElementById('locationInput');
+      const locationError = document.getElementById('locationError');
+
+      btn.addEventListener('click', () => {
+        list.style.display = list.style.display === 'block' ? 'none' : 'block';
+        locationError.style.display = 'none';
+      });
+
+      list.querySelectorAll('li').forEach(item => {
+        item.addEventListener('click', () => {
+          btn.textContent = item.textContent + ' ▾';
+          input.value = item.textContent;
+          list.style.display = 'none';
+          locationError.style.display = 'none';
+        });
+      });
+
+      // Close dropdown if clicked outside
+      window.addEventListener('click', function(e) {
+        if (!btn.contains(e.target) && !list.contains(e.target)) {
+          list.style.display = 'none';
+        }
+      });
+      
+      // Limit checkboxes for experiences (Question 9)
+      const experienceCheckboxes = document.querySelectorAll('#experienceCheckboxes input[type="checkbox"]');
+      const maxSelections = 3;
+      experienceCheckboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', () => {
+              const selectedCount = document.querySelectorAll('#experienceCheckboxes input[type="checkbox"]:checked').length;
+              if (selectedCount > maxSelections) {
+                  alert(`You can only select up to ${maxSelections} options.`);
+                  checkbox.checked = false;
+              }
+          });
+      });
+
+      // Form validation and submission
+      const form = document.getElementById('companyForm');
+      const successMessage = document.getElementById('successMessage');
+      
+      // Add input validation
+      const requiredFields = form.querySelectorAll('[required]');
+      requiredFields.forEach(field => {
+        field.addEventListener('blur', function() {
+          validateField(this);
+        });
+      });
+      
+      // Form submission
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate all required fields
+        let isValid = true;
+        requiredFields.forEach(field => {
+          if (!validateField(field)) {
+            isValid = false;
+          }
+        });
+        
+        // Validate location
+        if (!input.value) {
+          locationError.style.display = 'block';
+          isValid = false;
+        } else {
+          locationError.style.display = 'none';
+        }
+        
+        // Validate checkboxes for question 6
+        const goalsChecked = form.querySelectorAll('input[name="goals"]:checked').length > 0;
+        if (!goalsChecked) {
+          document.getElementById('goalsError').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('goalsError').style.display = 'none';
+        }
+        
+        // Validate checkboxes for question 9
+        const experiencesChecked = form.querySelectorAll('input[name="experiences"]:checked').length > 0;
+        if (!experiencesChecked) {
+          document.getElementById('experiencesError').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('experiencesError').style.display = 'none';
+        }
+        
+        if (!isValid) {
+          // Scroll to first error
+          const firstError = form.querySelector('.error-message[style*="display: block"], .location-error[style*="display: block"]') || 
+                            form.querySelector('.error-message, .location-error');
+          if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+
+        const submitBtn = form.querySelector('.submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        
+        // Create FormData
+        const formData = new FormData(form);
+        
+        // Append location from dropdown
+        formData.append('location', input.value);
+        
+        // Consolidate checkbox answers
+        const goals = Array.from(form.querySelectorAll('input[name="goals"]:checked')).map(cb => {
+            if (cb.value === 'Other') {
+                const otherText = form.querySelector('#goalsOtherText').value;
+                return `Other: ${otherText}`;
+            }
+            return cb.value;
+        }).join(', ');
+        formData.set('goals', goals);
+
+        const experiences = Array.from(form.querySelectorAll('input[name="experiences"]:checked')).map(cb => {
+            if (cb.value === 'Other') {
+                const otherText = form.querySelector('#experiencesOtherText').value;
+                return `Other: ${otherText}`;
+            }
+            return cb.value;
+        }).join(', ');
+        formData.set('experiences', experiences);
+        
+        // Submit to Google Sheets
+        submitToGoogleSheets(formData)
+          .then(response => {
+            if (response.ok) {
+              // Show success message
+              successMessage.style.display = 'block';
+              form.style.display = 'none';
+              document.querySelector('.form-title').style.display = 'none';
+              document.querySelector('p').style.display = 'none';
+              
+              // Scroll to success message
+              successMessage.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              throw new Error('Network response was not ok');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert("There was a problem submitting your form. Please try again later or contact us directly.");
+          })
+          .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Form';
+          });
+      });
+      
+      // Field validation function
+      function validateField(field) {
+        const errorElement = document.getElementById(field.name + 'Error') || 
+                            document.getElementById(field.id + 'Error');
+        
+        if (!errorElement) return true;
+        
+        if (!field.value.trim()) {
+          errorElement.style.display = 'block';
+          return false;
+        }
+        
+        // Email validation
+        if (field.type === 'email') {
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailPattern.test(field.value)) {
+            errorElement.style.display = 'block';
+            return false;
+          }
+        }
+        
+        errorElement.style.display = 'none';
+        return true;
+      }
+    });
+
+    function toggleOtherInput(checkbox, inputId) {
+      const inputField = document.getElementById(inputId);
+      if (checkbox.checked) {
+        inputField.style.display = 'inline-block';
+        inputField.setAttribute('required', 'true');
+      } else {
+        inputField.style.display = 'none';
+        inputField.removeAttribute('required');
+        inputField.value = '';
+      }
+    }
+
+    function submitToGoogleSheets(formData) {
+      // Replace with your actual Google Apps Script Web App URL
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbxP8DXispBpbBekEYOwvikVluVX7DWS4doQ10vPyotzfCMelFH0ENloWBBoHT9JpbiE/exec';
+      
+      return fetch(scriptURL, {
+        method: 'POST',
+        body: formData
+      });
+    }
+  </script>
+</body>
+</html>
